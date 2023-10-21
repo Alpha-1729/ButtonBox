@@ -21,6 +21,8 @@ os.chdir(script_path)
 def move_window(event):
     root.geometry(f'+{event.x_root}+{event.y_root}')
 
+    with open(config_path, 'r') as config_file:
+        config_data = json.load(config_file)
     # Update the coordinates in the config file.
     config_data['coordinate']['x'] = event.x_root
     config_data['coordinate']['y'] = event.y_root
