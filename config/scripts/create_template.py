@@ -10,13 +10,15 @@ from pathlib import Path
 os.chdir(Path(__file__).parents[2])
 
 template_path = os.path.join(os.getcwd(), 'config', 'templates')
-config_path = os.path.join(os.getcwd(), 'config', 'config.json')
+config_json_path = os.path.join(os.getcwd(), 'config', 'config.json')
 
 # Read the config from the config.json file.
-with open(config_path, 'r') as config_file:
+with open(config_json_path, 'r') as config_file:
     config_data = json.load(config_file)
 
 latest_section = config_data['section']['latest']
+
+pre_run_command = config_data['template']['pre-run-command']
 
 template_prefix = config_data['template']['prefix']
 template_prefix = f'-{template_prefix}' if len(template_prefix.strip()) > 0 else ''
@@ -54,5 +56,10 @@ for root_dir, sub_dir, file_list in os.walk(destination_path):
 config_data['template']['number'] += 1
 config_data['template']['section'] = config_data['section']['latest']
 config_data['template']['latest'] = template_dir_name
-with open(config_path, 'w') as config_file:
+with open(config_json_path, 'w') as config_file:
     json.dump(config_data, config_file)
+
+# Executing pre-run command.
+if os.path.exists(destination_path) and pre_run_command:
+    os.chdir(destination_path)
+    os.system(pre_run_command)

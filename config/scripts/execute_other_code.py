@@ -18,7 +18,10 @@ config_path = os.path.join('config', 'config.json')
 with open(config_path, 'r') as config_file:
     config_data = json.load(config_file)
 
-code_runner = config_data['code_runner']
+run_command = config_data['run-command']
 
-file_name = filedialog.askopenfilename(initialdir=os.getcwd(), title='Select a script')
-os.system('{} "{}"'.format(code_runner['program'], file_name))
+selected_dir = filedialog.askdirectory(initialdir=os.getcwd(), title='Select a directory')
+
+if run_command:
+    os.chdir(selected_dir)
+    os.system(run_command)

@@ -15,9 +15,9 @@ with open(config_path, 'r') as config_file:
 
 latest_section = config_data['section']['latest']
 latest_template = config_data['template']['latest']
-code_runner = config_data['code_runner']
+run_command = config_data['run-command']
 
 script_path = os.path.join(os.getcwd(), latest_section, latest_template)
-if os.path.exists(script_path):
+if os.path.exists(script_path) and run_command:
     os.chdir(script_path)
-    os.system('{} {}'.format(code_runner['program'], code_runner['file_name']))
+    os.system(run_command)
